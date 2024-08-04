@@ -1,4 +1,4 @@
-# Go Programming Language - it's about to get real
+# Go Programming Language
 
 - A package is a collection of source files in the same directory that are compiled together.
 - A module is a collection of related Go packages that are released together. A Go repository typically contains only one module
@@ -9,33 +9,63 @@
 - https://gobridge.org/
 - https://go.dev/play/
 
-https://www.youtube.com/watch?v=YS4e4q9oBaU
+<https://www.youtube.com/watch?v=YS4e4q9oBaU>
 @23:18 - going to need to add path to terminal for golang libraries
 
-## General
+## 1. General
 
 - strong statically typed
   - key feature: garbage collection
   - built-in concurrency
   - standalone binaries ()
 
-## Folder Structure
+**#best-practice: simplicity is the key to build good software**
+
+## 2. Synatx
+
+- Go does not require semicolons at the ends of statements or declarations, except where two or more appear on the same line.
+
+## 3. Folder Structure
 
 src - code will sit
 bin - directory is used for compiled binaries
-pkg - modules we are using are compiled as intermediate binaies to be used by our application
+pkg - modules we are using are compiled as intermediate binaries to be used by our application
 
-- need to mirror where application is going to be in the sorce control
-- i.e. src -> github.com -> TinoOnline - appname - main.go
+### Understanding Importing Packages
 
-## Important notes
+- Online
+  - need to mirror where application is going to be in the source control
+  - i.e. src -> github.com -> TinoOnline - appname - main.go
+  - the mod.go can have any name as package
+  - the individual folder names should reflect the package the contained files belong to. 
+- Local (https://go.dev/doc/tutorial/call-module-code)
+  - ```
+    <chapter1>/
+      |-- lissajous/
+          |-- go.mod/ package example.com/lissajous
+          |-- lissajous.go/ func Hello
+      |-- server/
+          |-- go.mod/
+          |-- go.sum/
+          |-- main.go/ func main
+    ```
+    - first had to map the module to the local file path: `go mod edit -replace example.com/lissajous=../lissajous`
+    - then ran go get example.com/lissajous, for some reason tidy didn't work
+    - then you can run tidy
+    - when I import, I import `example.com/lissajous`, then lissajous.Hello
+
+## 4. Important notes
 
 - a function whose name starts with a capital letter can be called by a function not in the same package. e.g. `func Hello (){}` i.e. exported name
   - preserving backward compatibility
-- code executed as an application must be in a `main package`, `main` musn't be in capital letters
-- changing function's signature is changing the input and output paramters that would break the code. Best to create a new function
+- code executed as an application must be in a `main package`, `main` mustn't be in capital letters
+- changing function's signature is changing the input and output parameters that would break the code. Best to create a new function
+- Closing Resources is Important
+  - Memory Management: unreleased resor. continue to consume system resources, leading to memory leaks and degraded performance.
+  - Resource Limits: Operating systems impose limits on the number of open files, network connections, and other resources. 
+  - Good Practice
 
-## Common packages used and types
+## 5. Common packages used and types
 
 ### commands
 
@@ -51,11 +81,15 @@ pkg - modules we are using are compiled as intermediate binaies to be used by ou
 ### packages
 
 - fmt
-  - `.Println()` prints to console, `.Sprintf()` returns formated string, `%T` prints the variab;e's type, `%v` prints the value (numerical), `%q` prints string value
+  - `Sprint/f/ln` Returns a formatted string. `Print/f/ln`: Print to standard output (console). `Fprint/f/ln`: Print to a specified writer.
+  - *Verbs:* `%T` prints the variable's type, `%v` prints the value of any time, `%q` prints string value in quotes, `%s` prints the string, `%d` formats integer using decimal notation, `%c` rune unicode, `%t` boolean, `%f ,%g, %e` floating point, `%h, o%, b%` hex, octal, binary
+  
 - log
   - `.Fatal()`, `.SetPrefix()`, `log.SetFlags()`
 - errors
   - `.New()`
+- io/ioutil
+  - `data, err := ioutil.ReadFile(filename)` ReadFile returns a byte slice that must be converted into a string
 
 ### types and variables
 
@@ -69,39 +103,61 @@ pkg - modules we are using are compiled as intermediate binaies to be used by ou
     - rune // alias for int32 // represents a Unicode code point
     - float32 float64 (zero value = `0`)
     - complex64 complex128
+- `var c, python, java bool` can be declared at the package level and function level
+- `var c, python, java = true, false, "no!"` type can be inferred from the value passed or `c, python, java := true, false, "no!"`
+- `var arr = map[string]string{"This":"is javscript"}`
+- `:=` construct is not available outside functions
+- `const` cannot use `:=`
+  - must be a number, string, or boolean
+- type conversions
+  - `flaot()`, `int()`, `unit()`
+
+### string 
+
+- #best practice `strings.Join([]string," ")` is more efficient (faster) than `" " + stringSlice[i]`
+
+#### slice
+
 - `slice` an array := `[] <type> {.....}`
   - ommitting the size tells go the array can dynamically change
-  - `index,value := range([])`
-- `struct` is a collection of fields.
+  - `index,value := range([])` OR `_,value := range([])`
+- indexing [1:5] [m:n]: [include....exclude) i.e half-opens
+
+### struct
+
+- `struct` is a collection of values called fields.
+- accessed using dot notation Vertex.Y
 - ```
   type Vertex struct {
   	X int
   	Y int
   }
   ```
-- `var c, python, java bool` can be declared at the package level and function level
-- `var c, python, java = true, false, "no!"` type can be inferred from the value passed or `c, python, java := true, false, "no!"`
-- `var arr = map[string]string{"This":"is javscript"}`
-- `:= `construct is not available outside functions
-- `const` cannot use `:=`
-- type conversions
-  - `flaot()`, `int()`, `unit()`
 
-## Maps in go
+## 6. conditional statements
+
+- you can declare a varible in the if statement which's scope is limited to the variable and its children
+
+## 7. Maps in go
 
 - If key doesn’t exist, we get the value type’s zero value. `j := m["root"] // j == 0`
-- `len(map)`, `delete(map, key) `
+- `m["root"]++` same as `m["root"] = m["root"]+ 1`
+- `len(map)`, `delete(map, key)`
 - looping a map `for key, value := range m {....}`
 - `_, value := m["route"]` - to only get the vale without the key
 - `m = map[string]int{}` same as `m = make(map[string]int)` but this is a nil map i.e. not initialised: `var m map[string]int`
+- !!! `map` is a *reference* to the data structure created by `make`, no need to return!
+- ``` 
+      func main(){ mapreference := make(map[string]string) }
+      func other (mapreference map[string]string){ //changes to map here will propegraip up}
+  ```
 
-## Testing
+## 8. Testing
 
 - test functions take a pointer to the testing package's testing.T type as a parameter. You use this parameter's methods for reporting and logging from your test.
 - `go test` or `go test -v`
 
 ```
-
 func TestName(t \*testing.T) {
 if ..... {
 t.Fatalf(`....`, ....)
@@ -110,7 +166,7 @@ t.Fatalf(`....`, ....)
 
 ```
 
-## functions
+## 10. functions
 
 - combinining input types naming: `func add(x, y int)`
 - A return statement without arguments returns the named return values. This is known as a `"naked" return`.
@@ -121,3 +177,25 @@ t.Fatalf(`....`, ....)
   	return
   }
   ```
+
+## 11. For Loops
+
+- go only has one looping constructor (for loop)
+- init. and post statements are optional:
+    - essentially becomes a while loop
+    - ```
+        for ; sum < 1000; {
+            sum += sum
+        }
+    ```
+
+## 12. concurrency
+
+concurrency - execution of multiple tasks at the same time.
+
+- threads and locks?
+- issues like race conditions and deadlocks?
+-  race condition bug: if two concurrent requests (http) try to update a variable at the same time, it might not be incremented consistently
+  - therefore we use: mu.lock() and mu.unlock()
+
+*Concurrency focuses on managing multiple tasks at once, not necessarily implying that they're running simultaneously. Parallelism refers to the simultaneous execution of multiple tasks or distributing different parts of a specific task amongst different processors.*

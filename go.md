@@ -1,5 +1,7 @@
 # Go Programming Language
 
+_Tinotenda Kurimwi 25-07-2024_
+
 - A package is a collection of source files in the same directory that are compiled together.
 - A module is a collection of related Go packages that are released together. A Go repository typically contains only one module
 
@@ -82,7 +84,10 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 
 - fmt
   - `Sprint/f/ln` Returns a formatted string. `Print/f/ln`: Print to standard output (console). `Fprint/f/ln`: Print to a specified writer.
-  - *Verbs:* `%T` prints the variable's type, `%v` prints the value of any time, `%q` prints string value in quotes, `%s` prints the string, `%d` formats integer using decimal notation, `%c` rune unicode, `%t` boolean, `%f ,%g, %e` floating point, `%h, o%, b%` hex, octal, binary
+  - *Verbs:* `%T` prints the variable's type, `%v` prints the value of *any* type, `%q` prints string value in quotes, `%s` prints the string, `%d` formats integer using decimal notation, `%c` rune unicode, `%t` boolean, `%f ,%g, %e` floating point, `%h, o%, b%` hex, octal, binary
+  - `.Printf("%8T")` the 8 will creating spacing to indent out 
+  - `.Printf("%8T %[1]")` reuse whatever parameter one was similar to sql
+  - #Best practice to print the error to `fmt.Fprint(os.Stderr, "no values")`
   
 - log
   - `.Fatal()`, `.SetPrefix()`, `log.SetFlags()`
@@ -99,29 +104,44 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
     - string (zero value = `""`)
     - int int8 int16 int32 int64 (zero value = `0`)
     - uint uint8 uint16 uint32 uint64 uintptr (zero value = `0`)
-    - byte // alias for uint8
-    - rune // alias for int32 // represents a Unicode code point
+    - byte // alias for uint8 - ASCII
+    - rune // alias for int32 // represents a UNICODE code point (a character)
     - float32 float64 (zero value = `0`)
     - complex64 complex128
+- *bool is not equal to 0 or 1, you can need to check this* 
 - `var c, python, java bool` can be declared at the package level and function level
 - `var c, python, java = true, false, "no!"` type can be inferred from the value passed or `c, python, java := true, false, "no!"`
 - `var arr = map[string]string{"This":"is javscript"}`
 - `:=` construct is not available outside functions
 - `const` cannot use `:=`
-  - must be a number, string, or boolean
-- type conversions
+  - must be a numbers (int,unit,float), string, or boolean (const are completely immutable)
+- type conversions (type cast)
   - `flaot()`, `int()`, `unit()`
 
 ### string 
-
+- strings are immutable (they are descriptors)
+    - if no one is using that descriptor go will garbage collect it
 - #best practice `strings.Join([]string," ")` is more efficient (faster) than `" " + stringSlice[i]`
+- all strings are unicode and not ASCII (english only characters)
+- ! as a result the length of a string is the byte count, and it will spill over from the rune count. `len(string)`
+- string +=  "some string" 
 
 #### slice
-
-- `slice` an array := `[] <type> {.....}`
+ 
+- `slice` is like an array := `[] <type> {.....}`
+- slice is like a descriptor
+- `a = b` means that b just points to a
+- `a := b` means they share the same storage space 
   - ommitting the size tells go the array can dynamically change
   - `index,value := range([])` OR `_,value := range([])`
 - indexing [1:5] [m:n]: [include....exclude) i.e half-opens
+- you cannot use equal operator
+- `copy(a,b)` this will make a new copy but take the smallest
+
+### array (not slice)
+- `[3]int` is distinct from `[3]int{}`, when you specify the size
+- you can use equal operator
+- values a copies over and not pointed to/from
 
 ### struct
 
@@ -133,6 +153,26 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
   	Y int
   }
   ```
+- ```
+  subtests := []struct {
+		items  []string
+		result string
+	}{
+		{
+			items:  []string{},
+			result: "The Name is John!",
+		},
+
+		{
+			items:  []string{"Hager", "Rachel", "Esau"},
+			result: "The Name is Hager, Rachel, Esau!",
+		},
+	}
+  ```
+
+### pointers
+
+- you pass a pointer to the float the and the function will put the value into the variable, e.g. &val `fmt.Fscanln(os.Stdin, &val)`
 
 ## 6. conditional statements
 
@@ -141,16 +181,19 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 ## 7. Maps in go
 
 - If key doesn’t exist, we get the value type’s zero value. `j := m["root"] // j == 0`
+- like string and slice, it's a descriptor `m = p` then they point to each other 
 - `m["root"]++` same as `m["root"] = m["root"]+ 1`
 - `len(map)`, `delete(map, key)`
 - looping a map `for key, value := range m {....}`
-- `_, value := m["route"]` - to only get the vale without the key
+- `value := m["route"]` - to only get the vale without the key
+- `value, ok := m["route"]` - ok tells you if the key was there or not
 - `m = map[string]int{}` same as `m = make(map[string]int)` but this is a nil map i.e. not initialised: `var m map[string]int`
 - !!! `map` is a *reference* to the data structure created by `make`, no need to return!
 - ``` 
       func main(){ mapreference := make(map[string]string) }
       func other (mapreference map[string]string){ //changes to map here will propegraip up}
   ```
+
 
 ## 8. Testing
 

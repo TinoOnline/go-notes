@@ -1,0 +1,1 @@
+Zero-shot - Zero-shot learning refers to the ability to complete a task without having received any training examples.

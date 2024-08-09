@@ -8,10 +8,10 @@ _Tinotenda Kurimwi 25-07-2024_
   - when specifying the module it doesn't matter where the package is yet, you can specify it afterwards during the import.
   - you can have one mod.go for the module and then in subdirectories you can have packages
 
-- https://gobridge.org/
-- https://go.dev/play/
+- [Go Bridge](https://gobridge.org/)
+- [Go Playground](https://go.dev/play/)
 
-<https://www.youtube.com/watch?v=YS4e4q9oBaU>
+[Initial Tutorial](https://www.youtube.com/watch?v=YS4e4q9oBaU)
 @23:18 - going to need to add path to terminal for golang libraries
 
 ## 1. General
@@ -22,6 +22,7 @@ _Tinotenda Kurimwi 25-07-2024_
   - standalone binaries ()
 
 **#best-practice: simplicity is the key to build good software**
+**#best-practice: always check the error and handle them, all security problems are bugs and all bugs are security problems**
 
 ## 2. Synatx
 
@@ -40,7 +41,7 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
   - i.e. src -> github.com -> TinoOnline - appname - main.go
   - the mod.go can have any name as package
   - the individual folder names should reflect the package the contained files belong to. 
-- Local (https://go.dev/doc/tutorial/call-module-code)
+- [Local Implementation](https://go.dev/doc/tutorial/call-module-code)
   - ```
     <chapter1>/
       |-- lissajous/
@@ -84,7 +85,7 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 
 - fmt
   - `Sprint/f/ln` Returns a formatted string. `Print/f/ln`: Print to standard output (console). `Fprint/f/ln`: Print to a specified writer.
-  - *Verbs:* `%T` prints the variable's type, `%v` prints the value of *any* type, `%q` prints string value in quotes, `%s` prints the string, `%d` formats integer using decimal notation, `%c` rune unicode, `%t` boolean, `%f ,%g, %e` floating point, `%h, o%, b%` hex, octal, binary
+  - *Verbs:* `%T` prints the variable's type, `%v` prints the value of *any* type, `%+v` for struct, `%q` prints string value in quotes, `%s` prints the string, `%d` formats integer using decimal notation, `%c` rune unicode, `%t` boolean, `%f ,%g, %e` floating point,`%.3f ` formats to 3 decimal places, `%h, o%, b%` hex, octal, binary
   - `.Printf("%8T")` the 8 will creating spacing to indent out 
   - `.Printf("%8T %[1]")` reuse whatever parameter one was similar to sql
   - #Best practice to print the error to `fmt.Fprint(os.Stderr, "no values")`
@@ -176,7 +177,9 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 
 ## 6. conditional statements
 
-- you can declare a varible in the if statement which's scope is limited to the variable and its children
+- you can declare a variable in the if statement which's scope is limited to the variable and its children
+
+
 
 ## 7. Maps in go
 
@@ -211,7 +214,7 @@ t.Fatalf(`....`, ....)
 
 ## 10. functions
 
-- combinining input types naming: `func add(x, y int)`
+- combining input types naming: `func add(x, y int)`
 - A return statement without arguments returns the named return values. This is known as a `"naked" return`.
 - ```
   func split(sum int) (x, y int) {
@@ -224,8 +227,9 @@ t.Fatalf(`....`, ....)
 ## 11. For Loops
 
 - go only has one looping constructor (for loop)
+- you can use the continue statement to make the next iteration start early
 - init. and post statements are optional:
-    - essentially becomes a while loop
+    - essentially becomes a while loop, you can break to terminate
     - ```
         for ; sum < 1000; {
             sum += sum

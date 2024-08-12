@@ -30,9 +30,9 @@ _Tinotenda Kurimwi 25-07-2024_
 
 ## 3. Folder Structure
 
-src - code will sit
-bin - directory is used for compiled binaries
-pkg - modules we are using are compiled as intermediate binaries to be used by our application
+~~src - code will sit~~
+~~bin - directory is used for compiled binaries~~
+~~pkg - modules we are using are compiled as intermediate binaries to be used by our application~~
 
 ### Understanding Importing Packages
 
@@ -62,9 +62,9 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 - a function whose name starts with a capital letter can be called by a function not in the same package. e.g. `func Hello (){}` i.e. exported name
   - preserving backward compatibility
 - code executed as an application must be in a `main package`, `main` mustn't be in capital letters
-- changing function's signature is changing the input and output parameters that would break the code. Best to create a new function
+- changing function's signature is changing the input and output parameters that would break the code. #best-practice to create a new function
 - Closing Resources is Important
-  - Memory Management: unreleased resor. continue to consume system resources, leading to memory leaks and degraded performance.
+  - Memory Management: unreleased resources continue to consume system resources, leading to memory leaks and degraded performance.
   - Resource Limits: Operating systems impose limits on the number of open files, network connections, and other resources. 
   - Good Practice
 
@@ -77,6 +77,7 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 - `go mod edit -replace example.com/greetings=../greetings`
 - `go test`
 - `go build` command compiles the packages, along with their dependencies, but it doesn't install the results.
+  - `go build -o main .` build and output main in current directory 
 - `go install` command compiles and installs the packages.
 - `go list` to discover the install path
   - `go list -f '{{.Target}}'`
@@ -85,15 +86,15 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 
 - fmt
   - `Sprint/f/ln` Returns a formatted string. `Print/f/ln`: Print to standard output (console). `Fprint/f/ln`: Print to a specified writer.
-  - *Verbs:* `%T` prints the variable's type, `%v` prints the value of *any* type, `%+v` for struct, `%q` prints string value in quotes, `%s` prints the string, `%d` formats integer using decimal notation, `%c` rune unicode, `%t` boolean, `%f ,%g, %e` floating point,`%.3f ` formats to 3 decimal places, `%h, o%, b%` hex, octal, binary
+  - *Verbs:* `%T` prints the variable's type, `%v` prints the value of *any* type, `%+v` for struct, `%q` prints string value in quotes, `%s` prints the string, `%d` formats integer using decimal notation, `%c` rune unicode, `%t` boolean, `%f ,%g, %e` floating point,`%.3f ` formats to 3 decimal places, `%h, o%, b%` hex, octal, binary, `%p` print a pointer (the address within a variable)
   - `.Printf("%8T")` the 8 will creating spacing to indent out 
   - `.Printf("%8T %[1]")` reuse whatever parameter one was similar to sql
-  - #Best practice to print the error to `fmt.Fprint(os.Stderr, "no values")`
+  - #best-practice to print the error to `fmt.Fprint(os.Stderr, "no values")`
   
 - log
   - `.Fatal()`, `.SetPrefix()`, `log.SetFlags()`
 - errors
-  - `.New()`
+  - `.New(<string>)`
 - io/ioutil
   - `data, err := ioutil.ReadFile(filename)` ReadFile returns a byte slice that must be converted into a string
 
@@ -109,31 +110,31 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
     - rune // alias for int32 // represents a UNICODE code point (a character)
     - float32 float64 (zero value = `0`)
     - complex64 complex128
-- *bool is not equal to 0 or 1, you can need to check this* 
+- *bool is not equal to 0 or 1, you can need to check this explicitly* 
 - `var c, python, java bool` can be declared at the package level and function level
 - `var c, python, java = true, false, "no!"` type can be inferred from the value passed or `c, python, java := true, false, "no!"`
-- `var arr = map[string]string{"This":"is javscript"}`
+- `var arr = map[string]string{"This":"is javascript"}`
 - `:=` construct is not available outside functions
 - `const` cannot use `:=`
   - must be a numbers (int,unit,float), string, or boolean (const are completely immutable)
 - type conversions (type cast)
-  - `flaot()`, `int()`, `unit()`
+  - `float()`, `int()`, `unit()`
 
 ### string 
 - strings are immutable (they are descriptors)
     - if no one is using that descriptor go will garbage collect it
 - #best practice `strings.Join([]string," ")` is more efficient (faster) than `" " + stringSlice[i]`
 - all strings are unicode and not ASCII (english only characters)
-- ! as a result the length of a string is the byte count, and it will spill over from the rune count. `len(string)`
+- *!* as a result the length of a string is the byte count [12 34 63 73 28], and it will spill over from the rune count. `len(string)`
 - string +=  "some string" 
 
-#### slice
+### slice
  
 - `slice` is like an array := `[] <type> {.....}`
-- slice is like a descriptor
+- slice is a descriptor, passed by reference
 - `a = b` means that b just points to a
-- `a := b` means they share the same storage space 
-  - ommitting the size tells go the array can dynamically change
+- `a := b` means they share the same storage space *!* changing a will change b
+  - omitting the size tells go the array can dynamically change
   - `index,value := range([])` OR `_,value := range([])`
 - indexing [1:5] [m:n]: [include....exclude) i.e half-opens
 - you cannot use equal operator
@@ -179,8 +180,6 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 
 - you can declare a variable in the if statement which's scope is limited to the variable and its children
 
-
-
 ## 7. Maps in go
 
 - If key doesn’t exist, we get the value type’s zero value. `j := m["root"] // j == 0`
@@ -194,7 +193,7 @@ pkg - modules we are using are compiled as intermediate binaries to be used by o
 - !!! `map` is a *reference* to the data structure created by `make`, no need to return!
 - ``` 
       func main(){ mapreference := make(map[string]string) }
-      func other (mapreference map[string]string){ //changes to map here will propegraip up}
+      func other (mapreference map[string]string){ //changes to map here will propagate up}
   ```
 
 

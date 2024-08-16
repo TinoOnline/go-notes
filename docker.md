@@ -28,7 +28,7 @@ Physical Computer
 ## Docker Compose
 
 `docker compose up`
-this will compose the given image/images
+this will compose the given image/images from the compose.yml file
 
 `docker compose down --rmi all`
 `--rmi` removes images, this will decommission your docker container and remove all dependencies defines in the docker-compose.yml file
@@ -77,5 +77,12 @@ CMD node app.js
 ## Commands 
 - `--rm` removes container when it exits
 - `-d` runs it in detached mode, i.e. in the background
-- `-p` dest:docker-port
+- `-p` or `--publish` dest:docker-port
 - `--network=host` uses host's network, needs to be activated on mac
+
+
+## Docker Base Images
+
+- [golang](https://hub.docker.com/_/golang/)
+- [alpine](https://hub.docker.com/_/alpine/)
+    - this is a very bare image and you need to install a lot of the dependencies that you need

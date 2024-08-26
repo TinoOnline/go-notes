@@ -153,3 +153,24 @@ txtUserId = getRequestString("UserId");
 txtSQL = "SELECT * FROM Users WHERE UserId = @0";
 db.Execute(txtSQL,txtUserId);
 ```
+
+PostgreSQL backups and restores
+
+- create database dump: `pg_dump -h localhost -p 5432 -U postgres apex > apex.dump`, 
+  - -h -p are the hosts and ports, then -U specifies the username
+- `pg_dumpall` extracts the entire Postgres database instance into a script file. 
+  - `pg_dumpall -U username -f backup_file.sql`
+
+
+- `pg_restore -U username -d new_database_name -1 backup_file.sql`
+- working script using psql: `psql -h localhost -p 5432 -U postgres -d apex2 -f apex_cluster.sql`
+  - using the -1 flag, pg_restore will execute the entire restore operation inside a single transaction.
+    - Atomicity: If any part of the restore process fails, the entire transaction will be rolled back, leaving the database unchanged.
+    - the database will either be fully restored or not restored at all, important for consistency.
+
+- listing all the active connections to the database
+  - `SELECT * FROM pg_stat_activity;`
+
+Note:
+
+- The system catalogs are the place where a relational database management system stores schema metadata, such as information about tables and columns, and internal bookkeeping information. PostgreSQL's system catalogs are regular tables. You can drop and recreate the tables, add columns, insert and update values, and severely mess up your system that way. Normally, one should not change the system catalogs by hand, there are normally SQL commands to do that. 

@@ -44,3 +44,16 @@ package manager for linux
 - `||`  run the next command only if the previous one fails.
 - `echo "Today is $(date)"` like javascript
 
+
+In Bash script 
+
+```
+if test "$#" -ne 3; then
+    echo "USAGE: HOST PORT USER"
+    echo "Password can either be specified as an environment variable '\$PASSWORD' or through stdin"
+    exit 1
+fi
+```
+- `$#` represents the number of arguments passed
+- `test`: test command evaluates expression and returns either true (exit code 0) or false (non-zero exit code)
+- `-ne`: stands for "not equal".

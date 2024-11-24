@@ -144,7 +144,7 @@ SELECT ...
 
 - Base Statement: `txtSQL = "SELECT * FROM Users WHERE UserId = " + txtUserId;`
   - `txtUserId` is `105 OR 1=1`, 1=1 is always true
-  - Batched SQL: setting  `txtUserId` to `105; DROP TABLE Suppliers;` then it runs an additional command
+  - Batched SQL: setting `txtUserId` to `105; DROP TABLE Suppliers;` then it runs an additional command
 - Base Statement: `sql = 'SELECT * FROM Users WHERE Name ="' + uName + '" AND Pass ="' + uPass + '"'`
   - `uName` ot `UPass` is `" or ""="`, `or "" = ""` will always be true
 
@@ -156,14 +156,15 @@ db.Execute(txtSQL,txtUserId);
 
 PostgreSQL backups and restores
 
-- create database dump: `pg_dump -h localhost -p 5432 -U postgres apex > apex.dump`, 
+- create database dump: `pg_dump -h localhost -p 5432 -U postgres apex > apex.dump`,
   - -h -p are the hosts and ports, then -U specifies the username
-- `pg_dumpall` extracts the entire Postgres database instance into a script file. 
-  - `pg_dumpall -U username -f backup_file.sql`
+- `pg_dumpall` extracts the entire Postgres database instance into a script file.
 
+  - `pg_dumpall -U username -f backup_file.sql`
 
 - `pg_restore -U username -d new_database_name -1 backup_file.sql`
 - working script using psql: `psql -h localhost -p 5432 -U postgres -d apex2 -f apex_cluster.sql`
+
   - using the -1 flag, pg_restore will execute the entire restore operation inside a single transaction.
     - Atomicity: If any part of the restore process fails, the entire transaction will be rolled back, leaving the database unchanged.
     - the database will either be fully restored or not restored at all, important for consistency.
@@ -173,4 +174,16 @@ PostgreSQL backups and restores
 
 Note:
 
-- The system catalogs are the place where a relational database management system stores schema metadata, such as information about tables and columns, and internal bookkeeping information. PostgreSQL's system catalogs are regular tables. You can drop and recreate the tables, add columns, insert and update values, and severely mess up your system that way. Normally, one should not change the system catalogs by hand, there are normally SQL commands to do that. 
+- The system catalogs are the place where a relational database management system stores schema metadata, such as information about tables and columns, and internal bookkeeping information. PostgreSQL's system catalogs are regular tables. You can drop and recreate the tables, add columns, insert and update values, and severely mess up your system that way. Normally, one should not change the system catalogs by hand, there are normally SQL commands to do that.
+
+###################################################Setting UP Postgres###################################################
+
+In order to run the postgres in a container:
+
+- first is to setup environmental variables with the password
+- then execute `docker compose up`
+- then you will need to install postgres client [libpq](https://docs.risingwave.com/docs/current/install-psql-without-postgresql/)
+  - for mac this is done using brew install
+- to have a friendly user interface to be able to interact with this PGAdmin can be installed here:[pgadmin](https://www.pgadmin.org/download/)
+
+###################################################
